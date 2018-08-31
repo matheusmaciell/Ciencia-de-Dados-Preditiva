@@ -1,0 +1,75 @@
+---
+title: "lab2"
+output: html_document
+---
+```{r,echo=FALSE}
+library(tidyverse)
+dados <- read.csv('dadosCEAP.csv')
+limites <- read.csv('limiteMensalCEAP.csv')
+
+```
+```{r,echo=FALSE}
+#parte 1 da questao 1
+dados %>%
+  filter(valorLíquido > 0) %>%
+  group_by(nomeParlamentar) %>%
+  summarise(valor = sum(valorLíquido))%>%
+  arrange(-valor) %>%
+  slice(1:25) %>%
+  na.omit() %>%
+  ggplot(aes(x = reorder(nomeParlamentar, valor),y=valor))+geom_col()+coord_flip()+labs(title="Gasto dos deputados",x = "parlamentares",y = "gastos em reais")
+```
+
+```{r,echo=FALSE}
+#parte 2 da questao 1
+dados %>%
+  filter(valorLíquido > 0) %>%
+  group_by(nomeParlamentar) %>%
+  summarise(valor = sum(valorLíquido))%>%
+  arrange(valor) %>%
+  slice(1:25) %>%
+  na.omit() %>%
+  ggplot(aes(x = reorder(nomeParlamentar, -valor),y=valor))+geom_col()+coord_flip()+labs(title="O GRAFICAZAO DO MEU CUZAO",x = "parlamentares",y = "gastos em reais")
+```
+
+
+```{r,echo=FALSE}
+#parte 1 da questao 2
+dados %>%
+  filter(valorLíquido > 0) %>%
+  filter( tipoDocumento == 2) %>%
+  group_by(sgUF) %>%
+  summarise(valor = sum(valorLíquido))%>%
+  arrange(valor) %>%
+ 
+  ggplot(aes(x = reorder(sgUF, -valor),y=valor))+geom_bar(stat = "identity")+coord_flip()+labs(title="O GRAFICAZAO DO MEU CUZAO",x = "parlamentares",y = "gastos em reais")
+```
+
+
+```{r,echo=FALSE}
+#parte 1 da questao 3
+dados %>%
+  filter(valorLíquido > 0) %>%
+  filter( tipoDocumento == 2) %>%
+  group_by(sgUF) %>%
+  summarise(valor = sum(valorLíquido))%>%
+  arrange(valor) %>%
+ 
+  ggplot(aes(x = reorder(sgUF, -valor),y=valor))+geom_bar(stat = "identity")+coord_flip()+labs(title="O GRAFICAZAO DO MEU CUZAO",x = "parlamentares",y = "gastos em reais")
+```
+
+
+```{r,echo=FALSE}
+#parte 1 da questao 3
+dados %>%
+  filter( sgUF == "PB") %>%
+  group_by(sgUF)%>%
+  summarise(quantidade_usos = 1) %>%
+  arrange(-quantidade_usos) %>% na.omit()
+
+ 
+```
+
+
+
+
