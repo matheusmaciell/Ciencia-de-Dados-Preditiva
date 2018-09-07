@@ -1,0 +1,52 @@
+---
+title: "lab02"
+author: "Matheus Maciel"
+date: "6 de setembro de 2018"
+output: html_document
+---
+
+Primeiro vamos carregar os dados que seram utilizados nas questões.
+
+```{r,echo=TRUE}
+library(tidyverse)
+library(shiny)
+dados <- readr::read_csv('dadosCEAP.csv')
+```
+
+
+## Perguntas
+
+##1) Quais são os fornecedores  possuem mais registros no CEAP?
+
+Para responder esta questão, iremos agrupar os dados a partir do nome dos fornecedores, e então acumular os valores liquidos de cada CEAP omitindo aqueles cujos valores são desconhecidos. 
+
+```{r,echo=TRUE}
+
+dados %>%
+  filter(valorLíquido > 0) %>%
+  group_by(fornecedor) %>%
+  summarise(valor = sum(valorLíquido))%>%
+  arrange(-valor) %>%
+  slice(1:10) %>%
+  na.omit() %>%
+  ggplot(aes(x = reorder(fornecedor, valor),y=valor))+geom_col()+coord_flip()+labs(title="Principais fornecedores",x = "fornecedor",y = "gastos em reais")
+```
+
+Das operações citadas, podemos obter o seguinte grafico onde o eixo x representa o gasto em reais e o eixo Y representa o nome dos fornecedores Como pode ser visto, as primeiras posições são preenchidas por empresas aéreas como a TAM, GOL e AZUL.
+
+
+##2) dentre dos três tipos de documento (0 (Zero), para Nota Fiscal; 1 (um), para Recibo; e 2, para Despesa no Exterior)  possuem mais gastos em reais no CEAP?
+
+```{r,echo=TRUE}
+
+dados %>%
+  filter(valorLíquido > 0) %>%
+  group_by(tipoDocumento) %>%
+  summarise(valor = sum(valorLíquido))%>%
+  arrange(-valor) %>%
+  na.omit() %>%
+  ggplot(aes(x = reorder(tipoDocumento, valor),y=valor))+geom_col()+coord_flip()+labs(title="Principais tipos de documento",x = "tipos",y = "gastos em reais")
+```
+
+Dessa forma, podemos ver que os gastos feitos no exterior são bem menores em reais do que os documentos que tem o tipo Nota fiscal atrelados a ele. 
+
