@@ -1,0 +1,53 @@
+---
+title: "lab03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r setup, include=FALSE}
+eleicoes_data <- readr::read_csv(
+  here::here('lab03/eleicoes_2006_e_2010.csv'), 
+  local=readr::locale("br"),
+  col_types = cols(
+    ano = col_integer(),
+    sequencial_candidato = col_character(),
+    quantidade_doacoes = col_integer(),
+    quantidade_doadores = col_integer(),
+    total_receita = col_double(),
+    media_receita = col_double(),
+    recursos_de_outros_candidatos.comites = col_double(),
+    recursos_de_pessoas_fisicas = col_double(),
+    recursos_de_pessoas_juridicas = col_double(),
+    recursos_proprios = col_double(),
+    `recursos_de_partido_politico` = col_double(),
+    quantidade_despesas = col_integer(),
+    quantidade_fornecedores = col_integer(),
+    total_despesa = col_double(),
+    media_despesa = col_double(),
+    votos = col_integer(),
+    .default = col_character()))
+```
+
+1)Um modelo de regressão múltipla com todas as variáveis é plausível para explicar a variação em y (número de votos) em 2006? Mesma pergunta para 2010. 
+
+#Um modelo de regração múltipla com todas as variáveis não é plausível pois algumas variavéis como "Cargo", possuem o mesmo valor para todos os elementos da amostra, o que não influenciaria em uma regressão. 
+
+```{r setup, include=FALSE}
+ajuste = lm(votos ~ ., eleicoes_data %>% select(-cargo,-total_despesa,-sequencial_candidato))
+summary(ajuste)
+
+```
+2)Compare as regressões construídas para 2006 e 2010. Quais as diferenças/semelhanças percebidas? Algumas sugestões:
+  2.1)Analise os plots de resíduos e verifique se há tendências nos erros para cada ano.
+  2.2)Quais variáveis conseguem explicar melhor o número de votos? Compare essas variáveis entre os modelos. Mesma coisa para as          variáveis menos explicativas.
+  2.3)Compare os valores de R2 e RSE considerando as regressões para cada ano.
+  2.4)Inclua outros pontos de comparação que você ache interessante.
+
+3)Todas as variáveis são úteis para os modelos de regressão? Há variáveis redudantes? Faça análises para 2006 e 2010 separadamente. 
+
+4)No caso de haver variáveis pouco explicativas e/ou redudantes, construa um novo modelo sem essas variáveis e o compare ao modelo com todas as variáveis (e.g. em termos de R2 e RSE). Faça isso para 2006 e 2010 separadamente. 
+
+5)Construa agora uma regressão considerando os anos 2006 e 2010 em conjunto. Que diferenças/semelhanças você percebe em relação aos modelos individuais por ano? Veja a questão 2 para sugestões que você usar para comparação.
