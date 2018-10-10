@@ -5,6 +5,12 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(readr)
+library(knitr)
+library(tidyverse)
+
+
 ```
 
 ```{r setup, include=FALSE}
@@ -33,12 +39,16 @@ eleicoes_data <- readr::read_csv(
 
 1)Um modelo de regressão múltipla com todas as variáveis é plausível para explicar a variação em y (número de votos) em 2006? Mesma pergunta para 2010. 
 
-#Um modelo de regração múltipla com todas as variáveis não é plausível pois algumas variavéis como "Cargo", possuem o mesmo valor para todos os elementos da amostra, o que não influenciaria em uma regressão. 
+#Analisando os dados podemos perceber que existem dados, tais como: "nome", "sequencial_candidato", "numero_cadidato", "cargo", "setor_economico_despesa", "setor_economico_receita", que servem apenas para identificação dos candidatos ou são lidas e tratadas como fatores de muitos níveis no modelo de regressão linear, o que atrapalha a leitura e interpretação deste.Por isto, um modelo de regressão múltipra com todas as variáveis não é plausível para explicar a variação em y(número de votos).
 
 ```{r setup, include=FALSE}
-ajuste = lm(votos ~ ., eleicoes_data %>% select(-cargo,-total_despesa,-sequencial_candidato))
-summary(ajuste)
+eleicoes_filtradas <- eleicoes_data %>%
+  select(-nome, -sequencial_candidato, -numero_cadidato, -cargo, -setor_economico_despesa, -setor_economico_receita)
 
+modelo <- lm(data = eleicoes_filtradas, votos ~ .)
+
+modelo %>% 
+  summary()
 ```
 2)Compare as regressões construídas para 2006 e 2010. Quais as diferenças/semelhanças percebidas? Algumas sugestões:
   2.1)Analise os plots de resíduos e verifique se há tendências nos erros para cada ano.
